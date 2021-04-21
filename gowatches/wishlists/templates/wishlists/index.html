@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-md-10 col-md-offset-1" id="wishList-Index">
+            {% if products or offers%}
+                <table class="table table-bordered " dir="rtl">
+                    <thead >
+                        <tr>
+                            <th class="product-remove text-center">Remove</th>
+                            <th class="product-thumbnail text-center">Image</th>
+                            <th class="product-name text-center">Product name</th>
+                            <th class="product-price">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for proudct in products%}
+                        <tr class="item-row">
+                            <td>
+                                <div class="remove-btn">
+                                    <a id="product-{{proudct.id}}">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <a>
+                                    {% if proudct.image %}
+                                        <img src="{{proudct.image.url}}">
+                                    {% endif %}
+                                </a>
+                            </td>
+                            <td>
+                                <a>
+                                    {{proudct.name}}
+                                </a>
+                            </td>
+                            <td class="product-price">
+                                <span id="product-{{proudct.id}}-price">{{proudct.price}}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% for offer in offers%}
+                        <tr class="item-row">
+                            <td>
+                                <div  class="remove-btn">
+                                    <a id="offer-{{offer.id}}">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <a>
+                                    {% if offer.image %}
+                                        <img src="{{offer.image.url}}">
+                                    {% endif %}
+                                </a>
+                            </td>
+                            <td>
+                                <a>
+                                    {{offer.name}}
+                                </a>
+                            </td>
+                            <td class="product-price">
+                                <span id="offer-{{offer.id}}-price">{{offer.price}}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else%}
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="regstation" style="background-color:#d0f0d8;">
+                        <h2></h2>
+                        <h3>Your wish list is empty</h3>
+                        <h4>do you want to go to our  <a href="/">home page</a> and check out
+                                    the new products?</h4>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footerjs %}
+    <script src='{% static "js/bootstrap.min.js" %}'></script>
+    <script type="text/javascript">
+        // On item remove
+        $(".remove-btn a").click(function () {
+            $.post("/en/wishlist/remove_item/",
+                {item: $(this).attr('id')});
+            // decrease number of items by one.
+            var items = Number($("#items_number").text().slice(0, -6));
+            $("#items_number").text(String(items - 1) + " items");
+            // deduce the item's cost from the total cost.
+            var wishlist_total_cost = Number($("#wishlist_price").text());
+            var item_price = Number($("#" + $(this).attr('id') + "-price").text());
+            var difference = wishlist_total_cost - item_price;
+            $("#wishlist_price").text(String(difference));
+            // hide item
+            $(this).parents("tr").fadeOut(500, function(){ $(this).remove();});
+        });
+    </script>
+{% endblock %}

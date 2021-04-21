@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=gowatches
+POSTGRES_USER=prSPaWuGwFiuMOocqTaSzvJFVWxNIRYo
+POSTGRES_PASSWORD=Ssxe1qPAv2bAmkXpjBQpcEKk07gITgXXciaMC3AzRhxwdrCH4Xu34xqn29xEPo4N
